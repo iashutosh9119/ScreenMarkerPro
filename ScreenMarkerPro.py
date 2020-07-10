@@ -49,7 +49,6 @@ root.config(cursor='tcross')
 
 
 def pen():
-    global PEN_FLAG
     PEN_FLAG = True
     try:
         canvas.deiconify()
@@ -57,13 +56,12 @@ def pen():
         pass    
 
 def choose_color():
-    global COLOR
     # variable to store hexadecimal code of color 
     color_code = colorchooser.askcolor(title ="Choose color")  
     COLOR = color_code[1]
 
 def whiteboard():
-    w.itemconfig(i,fill="White")
+    pass
 
 def blackboard():
     pass
@@ -81,7 +79,6 @@ def color():
     pass
 
 def size():
-    global LINEWIDTH
     LINEWIDTH = 20
 
 def close():
@@ -89,21 +86,14 @@ def close():
     canvas.destroy()
 
 def cursor():
-    global PEN_FLAG
     PEN_FLAG = False
     root.iconify()
 
 def motion(event):
-    global CUR_POS
-    global x, y
     CUR_POS = (x,y,event.x,event.y)
     x, y = event.x, event.y
 
 def left_click(event):
-    global PEN_FLAG
-    global CUR_POS
-    global PRESSED
-    global w
     PRESSED = not PRESSED
    
     if PEN_FLAG is True:

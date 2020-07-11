@@ -9,7 +9,6 @@ x = 0
 y = 0
 CUR_POS = (0,0,0,0)
 PEN_FLAG = False
-
 PRESSED = False
 LINEWIDTH = config.get('LINEWIDTH')
 COLOR = config.get('COLOR')
@@ -49,14 +48,17 @@ root.config(cursor='tcross')
 
 
 def pen():
+    global PEN_FLAG
     PEN_FLAG = True
     try:
         canvas.deiconify()
+        canvas.wm_attributes("-alpha", 0.5)
     except:
         pass    
 
 def choose_color():
     # variable to store hexadecimal code of color 
+    global COLOR
     color_code = colorchooser.askcolor(title ="Choose color")  
     COLOR = color_code[1]
 
@@ -79,6 +81,7 @@ def color():
     pass
 
 def size():
+    global LINEWIDTH
     LINEWIDTH = 20
 
 def close():
@@ -86,14 +89,18 @@ def close():
     canvas.destroy()
 
 def cursor():
+    global PEN_FLAG
     PEN_FLAG = False
     root.iconify()
 
 def motion(event):
+    global CUR_POS,x,y
     CUR_POS = (x,y,event.x,event.y)
     x, y = event.x, event.y
 
 def left_click(event):
+    global PRESSED
+    global PEN_FLAG
     PRESSED = not PRESSED
    
     if PEN_FLAG is True:

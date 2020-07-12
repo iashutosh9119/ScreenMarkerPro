@@ -4,7 +4,6 @@ from tkinter import colorchooser
 
 from configparser import ConfigParser
 config = ConfigParser()
-#loading current settings
 config.read('config.ini')
 
 PEN_SIZE = config.get('settings', 'pen_size')
@@ -25,6 +24,7 @@ TOOLBOX_VISIBLE = config.get('settings', 'toolbox_visible')
 TOOLBOX_VERTICLE = config.get('settings', 'toolbox_verticle')
 SHAPE_FILL = config.get('settings', 'shape_fill')
 FULLSCREEN_BOARD = config.get('settings', 'fullscreen_board')
+POINTER_ENABLE = config.get('settings', 'pointer_enable')
 
 x = 0
 y = 0
@@ -65,21 +65,25 @@ i = w.create_rectangle(0, 0, WIDTH, HEIGHT, fill=TRANSCOLOUR,outline=TRANSCOLOUR
 canvas.config(cursor='tcross')
 root.config(cursor='tcross')
 
+POINTER_ENABLE_CHECK = tk.BooleanVar()
+POINTER_ENABLE_CHECK.set(POINTER_ENABLE)
+
+
+
 
 def pen():
     global PEN_FLAG
     PEN_FLAG = True
     try:
         canvas.deiconify()
-        canvas.wm_attributes("-alpha", 0.5)
     except:
         pass    
 
 def choose_color():
     # variable to store hexadecimal code of color 
-    global COLOR
+    global PEN_COLOR
     color_code = colorchooser.askcolor(title ="Choose color")  
-    COLOR = color_code[1]
+    PEN_COLOR = color_code[1]
 
 def whiteboard():
     pass
@@ -123,10 +127,15 @@ def save_settings():
     config.set('settings', 'toolbox_verticle', str(TOOLBOX_VERTICLE))
     config.set('settings', 'shape_fill', str(SHAPE_FILL))
     config.set('settings', 'fullscreen_board', str(FULLSCREEN_BOARD))
+    config.set('settings', 'pointer_enable', str(POINTER_ENABLE))
 
-def size():
+
+def size(x):
     global PEN_SIZE
-    PEN_SIZE = 30
+    if x:
+        PEN_SIZE = x
+    else:
+        pass        
 
 def close():
     save_settings()
@@ -154,22 +163,33 @@ def left_click(event):
         while PRESSED:
             root.update()
             canvas.update()
-            w.create_line(CUR_POS[0], CUR_POS[1],CUR_POS[2], CUR_POS[3], fill=COLOR, width = LINEWIDTH,capstyle="round",joinstyle="round")
+            w.create_line(CUR_POS[0], CUR_POS[1],CUR_POS[2], CUR_POS[3], fill=PEN_COLOR, width = PEN_SIZE,capstyle="round",joinstyle="round")
             
+def highlight():
+    pass
 
+
+def pointer():
+    global POINTER_ENABLE
+    POINTER_ENABLE = POINTER_ENABLE_CHECK.get()
+    print(POINTER_ENABLE)
 
 menu = tk.Menu(root, tearoff=False)
 submenu = tk.Menu(menu,tearoff=False)
 
 menu.add_command(label="Cursor", command=cursor)
 menu.add_command(label="Pen", command=pen)
+menu.add_command(label="Highlighter", command=highlight)
+menu.add_checkbutton(label="Pointer",onvalue=True,offvalue=False,variable=POINTER_ENABLE_CHECK,command=pointer,selectcolor=POINTER_COLOR,foreground=POINTER_COLOR)
 menu.add_separator()
 
-#menu.add_command(label="Size", command=size)
 
 menu.add_cascade(label="Size", menu=submenu)
-
-submenu.add_command(label="Size 1", command = size)
+submenu.add_command(label="Small", command = lambda: size(2))
+submenu.add_command(label="Normal", command = lambda: size(5))
+submenu.add_command(label="Medium", command = lambda: size(10))
+submenu.add_command(label="Large", command = lambda: size(15))
+submenu.add_command(label="Custom", command = lambda: size(0))
 menu.add_command(label="Color", command=choose_color)
 menu.add_separator()
 

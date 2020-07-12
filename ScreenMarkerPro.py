@@ -1,17 +1,21 @@
 import tkinter as tk
 import json
 from tkinter import colorchooser
-with open('config.json') as config_file:
-    config = json.load(config_file)
 
+from configparser import ConfigParser
+config = ConfigParser()
+
+config.read('config.ini')
+
+print config.get('main', 'key1') # -> "value1"
+print config.get('main', 'key2') # -> "value2"
+print config.get('main', 'key3') # -> "value3"
 
 x = 0
 y = 0
 CUR_POS = (0,0,0,0)
 PEN_FLAG = False
 PRESSED = False
-LINEWIDTH = config.get('LINEWIDTH')
-COLOR = config.get('COLOR')
 
 
 root = tk.Tk()

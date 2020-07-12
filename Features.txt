@@ -1,0 +1,27 @@
+Proposed Features includes:
+
+1. Pen Tool.
+2. Highlighter Tool.
+3. Eraser Tool.
+4. Undo Tool.
+5. Text Tool.
+6. Delete Selected Tool.
+7. Delete All Tool.
+8. Shapes Tool.
+9. Board Tool.
+10. Snapshots Tool.
+11. Settings Tool.
+12. Visibility Tool when toolbox_visibility= True.
+13. Size Tool.
+14. Color Tool.
+
+Proposed Functionalities:
+1. Pen for writing over any screen.
+2. Highlighter for highlighting any thing.
+3. Chnaging size and color of pen and highlighter.
+4. Chnaging transparency of highlighter.
+5. Customizing board color and its size.
+6. Chnaging size of eraser.
+7. Taking custom and fullscreen screenshots.
+
+

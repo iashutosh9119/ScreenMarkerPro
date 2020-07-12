@@ -1,3 +1,7 @@
+
+You as a contributor may propose more Tools and Functionalities by modifing this file and Creating a pull request on GitHub or by simply creating an issue over GitHub..
+
+
 Proposed Features includes:
 
 1. Pen Tool.
@@ -14,14 +18,32 @@ Proposed Features includes:
 12. Visibility Tool when toolbox_visibility= True.
 13. Size Tool.
 14. Color Tool.
+15. Settings Tool.
+More to go.
 
 Proposed Functionalities:
 1. Pen for writing over any screen.
 2. Highlighter for highlighting any thing.
-3. Chnaging size and color of pen and highlighter.
-4. Chnaging transparency of highlighter.
-5. Customizing board color and its size.
-6. Chnaging size of eraser.
+3. Changing size and color of pen and highlighter.
+4. Changing transparency of highlighter.
+5. Customizing board color and its size over screen such as WhiteBoards or BlackBoards.
+6. Changing size of eraser.
 7. Taking custom and fullscreen screenshots.
+8. Creating transparent and completly color filled Shapes like arrows, rectangles, squares, circles, ovals etc.
+9. All tools and Functionalities at the right click of the mouse.
+10. Option for a floating toolbox.
+11. Pointer for highlighting cursor position.
+12. Changing Pointer color and size.
+13. Undoing latest change over screen.
+14. Writing text over screen.
+15. Changing color and size of text.
+16. Delete the objects by selecting it using Delete Selected Tool.
+17. Delete all the things/objects created over screen using Delete All Tool.
+18. Providing a main settings window using settings tool for Customizing all Functionalities.
+19. Changing Visibility of object(s) and the toolbox.
+20. One size tool for setting different size of different objects.
+21. One color tool for setting different color of different objects.
+More to go.
+
 
 

@@ -4,12 +4,27 @@ from tkinter import colorchooser
 
 from configparser import ConfigParser
 config = ConfigParser()
-
+#loading current settings
 config.read('config.ini')
 
-print config.get('main', 'key1') # -> "value1"
-print config.get('main', 'key2') # -> "value2"
-print config.get('main', 'key3') # -> "value3"
+PEN_SIZE = config.get('settings', 'pen_size')
+HIGHLIGHTER_SIZE = config.get('settings', 'highlighter_size')
+HIGHLIGHTER_TRANSPARENCY = config.get('settings', 'highlighter_transparency')
+ERASER_SIZE = config.get('settings', 'eraser_size')
+POINTER_SIZE = config.get('settings', 'pointer_size')
+TEXT_SIZE = config.get('settings', 'text_size')
+BOARD_WIDTH = config.get('settings', 'board_width')
+BOARD_HEIGHT = config.get('settings', 'board_height')
+PEN_COLOR = config.get('settings', 'pen_color')
+HIGHLIGHTER_COLOR = config.get('settings', 'highlighter_color')
+BOARD_COLOR = config.get('settings', 'board_color')
+POINTER_COLOR = config.get('settings', 'pointer_color')
+SHAPE_COLOR = config.get('settings', 'shape_color')
+TEXT_COLOR = config.get('settings', 'text_color')
+TOOLBOX_VISIBLE = config.get('settings', 'toolbox_visible')
+TOOLBOX_VERTICLE = config.get('settings', 'toolbox_verticle')
+SHAPE_FILL = config.get('settings', 'shape_fill')
+FULLSCREEN_BOARD = config.get('settings', 'fullscreen_board')
 
 x = 0
 y = 0
@@ -84,11 +99,39 @@ def hide():
 def color():
     pass
 
+def save_settings():
+    global PEN_SIZE, HIGHLIGHTER_SIZE, HIGHLIGHTER_TRANSPARENCY, ERASER_SIZE, POINTER_SIZE, TEXT_SIZE, BOARD_WIDTH, BOARD_HEIGHT, PEN_COLOR, HIGHLIGHTER_COLOR, BOARD_COLOR, POINTER_COLOR, SHAPE_COLOR, TEXT_COLOR, TOOLBOX_VISIBLE, TOOLBOX_VERTICLE, SHAPE_FILL, FULLSCREEN_BOARD
+    config.set('settings', 'pen_size', str(PEN_SIZE) )
+    config.set('settings', 'highlighter_size', str(HIGHLIGHTER_SIZE))
+    config.set('settings', 'highlighter_transparency', str(HIGHLIGHTER_TRANSPARENCY))
+    config.set('settings', 'eraser_size', str(ERASER_SIZE))
+    config.set('settings', 'pointer_size', str(POINTER_SIZE))
+    config.set('settings', 'text_size', str(TEXT_SIZE))
+    config.set('settings', 'board_width', str(BOARD_WIDTH))
+    config.set('settings', 'board_height', str(BOARD_HEIGHT))
+
+
+    config.set('settings', 'pen_color', str(PEN_COLOR))
+    config.set('settings', 'highlighter_color', str(HIGHLIGHTER_COLOR))
+    config.set('settings', 'board_color', str(BOARD_COLOR))
+    config.set('settings', 'pointer_color', str(POINTER_COLOR))
+    config.set('settings', 'shape_color', str(SHAPE_COLOR))
+    config.set('settings', 'text_color', str(TEXT_COLOR))
+
+
+    config.set('settings', 'toolbox_visible', str(TOOLBOX_VISIBLE))
+    config.set('settings', 'toolbox_verticle', str(TOOLBOX_VERTICLE))
+    config.set('settings', 'shape_fill', str(SHAPE_FILL))
+    config.set('settings', 'fullscreen_board', str(FULLSCREEN_BOARD))
+
 def size():
-    global LINEWIDTH
-    LINEWIDTH = 20
+    global PEN_SIZE
+    PEN_SIZE = 30
 
 def close():
+    save_settings()
+    with open('config.ini', 'w') as userconfigfile:
+        config.write(userconfigfile)
     root.destroy()
     canvas.destroy()
 

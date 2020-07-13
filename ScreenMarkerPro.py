@@ -26,6 +26,7 @@ SHAPE_FILL = config.get('settings', 'shape_fill')
 FULLSCREEN_BOARD = config.get('settings', 'fullscreen_board')
 POINTER_ENABLE = config.get('settings', 'pointer_enable')
 
+
 x = 0
 y = 0
 CUR_POS = (0,0,0,0)
@@ -37,6 +38,8 @@ circle = 0
 root = tk.Tk()
 root.geometry("{0}x{1}+0+0".format(root.winfo_screenwidth(), root.winfo_screenheight()))
 
+
+menu = tk.Menu(root, tearoff=False)
 
 canvas = tk.Tk()
 canvas.geometry("{0}x{1}+0+0".format(canvas.winfo_screenwidth(), canvas.winfo_screenheight()))
@@ -66,9 +69,9 @@ i = w.create_rectangle(0, 0, WIDTH, HEIGHT, fill=TRANSCOLOUR,outline=TRANSCOLOUR
 canvas.config(cursor='tcross')
 root.config(cursor='tcross')
 
+
 POINTER_ENABLE_CHECK = tk.BooleanVar()
 POINTER_ENABLE_CHECK.set(POINTER_ENABLE)
-
 
 
 
@@ -105,7 +108,7 @@ def color():
     pass
 
 def save_settings():
-    global PEN_SIZE, HIGHLIGHTER_SIZE, HIGHLIGHTER_TRANSPARENCY, ERASER_SIZE, POINTER_SIZE, TEXT_SIZE, BOARD_WIDTH, BOARD_HEIGHT, PEN_COLOR, HIGHLIGHTER_COLOR, BOARD_COLOR, POINTER_COLOR, SHAPE_COLOR, TEXT_COLOR, TOOLBOX_VISIBLE, TOOLBOX_VERTICLE, SHAPE_FILL, FULLSCREEN_BOARD
+    global PEN_SIZE, HIGHLIGHTER_SIZE, HIGHLIGHTER_TRANSPARENCY, ERASER_SIZE, POINTER_SIZE, TEXT_SIZE, BOARD_WIDTH, BOARD_HEIGHT, PEN_COLOR, HIGHLIGHTER_COLOR, BOARD_COLOR, POINTER_COLOR, SHAPE_COLOR, TEXT_COLOR, TOOLBOX_VISIBLE, TOOLBOX_VERTICLE, SHAPE_FILL, FULLSCREEN_BOARD,POINTER_ENABLE
     config.set('settings', 'pen_size', str(PEN_SIZE) )
     config.set('settings', 'highlighter_size', str(HIGHLIGHTER_SIZE))
     config.set('settings', 'highlighter_transparency', str(HIGHLIGHTER_TRANSPARENCY))
@@ -151,10 +154,11 @@ def cursor():
     root.iconify()
 
 def motion(event):
-    global CUR_POS,x,y,POINTER_SIZE,w,circle
+    global CUR_POS,x,y,POINTER_SIZE,w,circle,POINTER_ENABLE
     CUR_POS = (x,y,event.x,event.y)
     x, y = event.x, event.y
-    if bool(POINTER_ENABLE) is True:
+
+    if POINTER_ENABLE == True:
         if circle:
             w.delete(circle)
         radius = int(POINTER_SIZE)
@@ -182,43 +186,65 @@ def left_click(event):
             
 def highlight():
     pass
+            
+def shapes():
+    pass
 
 
 def pointer():
     global POINTER_ENABLE
     POINTER_ENABLE = POINTER_ENABLE_CHECK.get()
-    print(POINTER_ENABLE)
 
-menu = tk.Menu(root, tearoff=False)
-submenu = tk.Menu(menu,tearoff=False)
+def create_menu():
+    global POINTER_ENABLE_CHECK,POINTER_COLOR,menu
+    size_menu = tk.Menu(menu,tearoff=False)
+    board_menu = tk.Menu(menu,tearoff=False)
+    color_menu = tk.Menu(menu,tearoff=False)
+    shape_menu = tk.Menu(menu,tearoff=False)
 
-menu.add_command(label="Cursor", command=cursor)
-menu.add_command(label="Pen", command=pen)
-menu.add_command(label="Highlighter", command=highlight)
-menu.add_checkbutton(label="Pointer",onvalue=True,offvalue=False,variable=POINTER_ENABLE_CHECK,command=pointer,selectcolor=POINTER_COLOR,foreground=POINTER_COLOR)
-menu.add_separator()
+    menu.add_command(label="Cursor", command=cursor)
+    menu.add_command(label="Pen", command=pen)
+    menu.add_command(label="Highlighter", command=highlight)
+    menu.add_checkbutton(label="Pointer",onvalue=True,offvalue=False,variable=POINTER_ENABLE_CHECK,command=pointer,selectcolor=POINTER_COLOR,foreground=POINTER_COLOR)
+    menu.add_cascade(label="Shapes",menu=shape_menu)
+    shape_menu.add_command(label="Arrow", command = shapes)
+    shape_menu.add_command(label="Rectangle", command = shapes)
+    shape_menu.add_command(label="Square", command = shapes)
+    shape_menu.add_command(label="Circle", command = shapes)
+    menu.add_separator()
 
 
-menu.add_cascade(label="Size", menu=submenu)
-submenu.add_command(label="Small", command = lambda: size(2))
-submenu.add_command(label="Normal", command = lambda: size(5))
-submenu.add_command(label="Medium", command = lambda: size(10))
-submenu.add_command(label="Large", command = lambda: size(15))
-submenu.add_command(label="Custom", command = lambda: size(0))
-menu.add_command(label="Color", command=choose_color)
-menu.add_separator()
+    menu.add_cascade(label="Size", menu=size_menu)
+    size_menu.add_command(label="Small", command = lambda: size(2))
+    size_menu.add_command(label="Normal", command = lambda: size(5))
+    size_menu.add_command(label="Medium", command = lambda: size(10))
+    size_menu.add_command(label="Large", command = lambda: size(100))
+    size_menu.add_command(label="Custom", command = lambda: size(0))
 
-menu.add_command(label="Hide", command=hide)
-menu.add_command(label="Erase", command=erase)
-menu.add_separator()
 
-menu.add_command(label="WhiteBoard", command=whiteboard)
-menu.add_command(label="BlackBoard", command=blackboard)
-menu.add_separator()
+    menu.add_cascade(label="Color", menu=color_menu)
+    color_menu.add_command(label="Red", command = choose_color)
+    color_menu.add_command(label="Blue", command = choose_color)
+    color_menu.add_command(label="Green", command = choose_color)
+    color_menu.add_command(label="Yellow", command = choose_color)
+    color_menu.add_command(label="Custom", command = choose_color)
+    menu.add_separator()
 
-menu.add_command(label="Quit",command=close)
+    menu.add_command(label="Hide", command=hide)
+    menu.add_command(label="Erase", command=erase)
+    menu.add_command(label="Erase All", command=erase)
+    menu.add_separator()
+
+    menu.add_cascade(label="Board",menu= board_menu)
+    board_menu.add_command(label="WhiteBoard", command=whiteboard)
+    board_menu.add_command(label="BlackBoard", command=blackboard)
+    board_menu.add_command(label="Custom", command=blackboard)
+    menu.add_separator()
+
+    menu.add_command(label="Quit",command=close)
 
 def do_popup(event):
+    global menu
     try:
         menu.tk_popup(event.x_root, event.y_root)
 
@@ -231,6 +257,9 @@ root.bind("<Button-3>", do_popup)
 root.bind("<Button-1>", left_click)
 root.bind("<ButtonRelease-1>", left_click)
 root.bind('<Motion>', motion)
+
+
+create_menu()
 
 canvas.overrideredirect(1)
 canvas.wm_attributes("-topmost", True)

@@ -31,7 +31,7 @@ config.set('settings', 'toolbox_visible', 'False')
 config.set('settings', 'toolbox_verticle', 'True')
 config.set('settings', 'shape_fill', 'False')
 config.set('settings', 'fullscreen_board', 'True')
-config.set('settings', 'pointer_enable', 'True')
+config.set('settings', 'pointer_enable', 'False')
 
 
 with open('config.ini', 'w') as f:

@@ -31,7 +31,8 @@ y = 0
 CUR_POS = (0,0,0,0)
 PEN_FLAG = False
 PRESSED = False
-
+global circle
+circle = 0
 
 root = tk.Tk()
 root.geometry("{0}x{1}+0+0".format(root.winfo_screenwidth(), root.winfo_screenheight()))
@@ -150,9 +151,23 @@ def cursor():
     root.iconify()
 
 def motion(event):
-    global CUR_POS,x,y
+    global CUR_POS,x,y,POINTER_SIZE,w,circle
     CUR_POS = (x,y,event.x,event.y)
     x, y = event.x, event.y
+    if bool(POINTER_ENABLE) is True:
+        if circle:
+            w.delete(circle)
+        radius = int(POINTER_SIZE)
+        x_max = x + radius
+        x_min = x - radius
+        y_max = y + radius
+        y_min = y - radius
+        
+        circle = w.create_oval(x_max, y_max, x_min, y_min, outline=str(POINTER_COLOR))
+    else:
+        if circle:
+            w.delete(circle)
+
 
 def left_click(event):
     global PRESSED

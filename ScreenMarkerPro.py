@@ -154,10 +154,10 @@ def cursor():
     root.iconify()
 
 def motion(event):
-    global CUR_POS,x,y,POINTER_SIZE,w,circle,POINTER_ENABLE
+    global CUR_POS,x,y,POINTER_SIZE,w,circle,POINTER_ENABLE,POINTER_ENABLE_CHECK
     CUR_POS = (x,y,event.x,event.y)
     x, y = event.x, event.y
-
+    POINTER_ENABLE = POINTER_ENABLE_CHECK.get()
     if POINTER_ENABLE == True:
         if circle:
             w.delete(circle)
@@ -191,9 +191,6 @@ def shapes():
     pass
 
 
-def pointer():
-    global POINTER_ENABLE
-    POINTER_ENABLE = POINTER_ENABLE_CHECK.get()
 
 def create_menu():
     global POINTER_ENABLE_CHECK,POINTER_COLOR,menu
@@ -205,7 +202,7 @@ def create_menu():
     menu.add_command(label="Cursor", command=cursor)
     menu.add_command(label="Pen", command=pen)
     menu.add_command(label="Highlighter", command=highlight)
-    menu.add_checkbutton(label="Pointer",onvalue=True,offvalue=False,variable=POINTER_ENABLE_CHECK,command=pointer,selectcolor=POINTER_COLOR,foreground=POINTER_COLOR)
+    menu.add_checkbutton(label="Pointer",onvalue=True,offvalue=False,variable=POINTER_ENABLE_CHECK,selectcolor=POINTER_COLOR,foreground=POINTER_COLOR)
     menu.add_cascade(label="Shapes",menu=shape_menu)
     shape_menu.add_command(label="Arrow", command = shapes)
     shape_menu.add_command(label="Rectangle", command = shapes)

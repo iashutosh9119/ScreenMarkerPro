@@ -35,6 +35,22 @@ PRESSED = False
 global circle
 circle = 0
 
+MODE = {
+    'CURSOR'        : 0,
+    'PEN'           : 1,
+    'HIGHLIGHTER'   : 2,
+    'POINTER'       : 3,
+    'ARROW'         : 4,
+    'RECTANGLE'     : 5,
+    'SQUARE'        : 6,
+    'CIRCLE'        : 7,
+    'ERASER'        : 8,
+    'DELETE'        : 9,
+    'BOARD'         : 10,
+}
+
+SELECTED_MODE = -1
+
 root = tk.Tk()
 root.geometry("{0}x{1}+0+0".format(root.winfo_screenwidth(), root.winfo_screenheight()))
 
@@ -72,12 +88,12 @@ root.config(cursor='tcross')
 
 POINTER_ENABLE_CHECK = tk.BooleanVar()
 POINTER_ENABLE_CHECK.set(POINTER_ENABLE)
-
+POINTER_ENABLE = POINTER_ENABLE_CHECK.get()
 
 
 def pen():
-    global PEN_FLAG
-    PEN_FLAG = True
+    global SELECTED_MODE,MODE
+    SELECTED_MODE = MODE.get('PEN')
     try:
         canvas.deiconify()
     except:
@@ -149,15 +165,25 @@ def close():
     canvas.destroy()
 
 def cursor():
-    global PEN_FLAG
-    PEN_FLAG = False
+    global SELECTED_MODE,MODE
+    SELECTED_MODE = MODE.get('CURSOR')
     root.iconify()
 
+
+def pointer():
+    global POINTER_ENABLE,POINTER_ENABLE_CHECK, SELECTED_MODE, MODE
+    POINTER_ENABLE = POINTER_ENABLE_CHECK.get()
+    if POINTER_ENABLE == True:
+        SELECTED_MODE = MODE.get('CURSOR')
+    else:
+        SELECTED_MODE = -1
+
+
 def motion(event):
-    global CUR_POS,x,y,POINTER_SIZE,w,circle,POINTER_ENABLE,POINTER_ENABLE_CHECK
+    global CUR_POS,x,y,POINTER_SIZE,w,circle,POINTER_ENABLE
     CUR_POS = (x,y,event.x,event.y)
     x, y = event.x, event.y
-    POINTER_ENABLE = POINTER_ENABLE_CHECK.get()
+    
     if POINTER_ENABLE == True:
         if circle:
             w.delete(circle)
@@ -167,7 +193,7 @@ def motion(event):
         y_max = y + radius
         y_min = y - radius
         
-        circle = w.create_oval(x_max, y_max, x_min, y_min, outline=str(POINTER_COLOR))
+        circle = w.create_oval(x_max, y_max, x_min, y_min, outline=str(POINTER_COLOR),width=2)
     else:
         if circle:
             w.delete(circle)
@@ -175,14 +201,16 @@ def motion(event):
 
 def left_click(event):
     global PRESSED
-    global PEN_FLAG
+    global SELECTED_MODE,MODE,POINTER_ENABLE
     PRESSED = not PRESSED
    
-    if PEN_FLAG is True:
+    if SELECTED_MODE == MODE.get('PEN'):
         while PRESSED:
+            POINTER_ENABLE =False
             root.update()
             canvas.update()
             w.create_line(CUR_POS[0], CUR_POS[1],CUR_POS[2], CUR_POS[3], fill=PEN_COLOR, width = PEN_SIZE,capstyle="round",joinstyle="round")
+        POINTER_ENABLE = True
             
 def highlight():
     pass
@@ -202,7 +230,7 @@ def create_menu():
     menu.add_command(label="Cursor", command=cursor)
     menu.add_command(label="Pen", command=pen)
     menu.add_command(label="Highlighter", command=highlight)
-    menu.add_checkbutton(label="Pointer",onvalue=True,offvalue=False,variable=POINTER_ENABLE_CHECK,selectcolor=POINTER_COLOR,foreground=POINTER_COLOR)
+    menu.add_checkbutton(label="Pointer",onvalue=True,offvalue=False,variable=POINTER_ENABLE_CHECK,selectcolor=POINTER_COLOR,foreground=POINTER_COLOR,command= pointer)
     menu.add_cascade(label="Shapes",menu=shape_menu)
     shape_menu.add_command(label="Arrow", command = shapes)
     shape_menu.add_command(label="Rectangle", command = shapes)
